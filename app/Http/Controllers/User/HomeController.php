@@ -10,26 +10,37 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->query('search');   // ambil kata pencarian
-        $perPage = 10;                         // jumlah data per halaman
+        $search  = $request->query('search');
+        $perPage = 5;
 
-        // ====== DATA LAPORAN DENGAN FITUR PENCARIAN ======
-        $laporans = Laporan::when($search, function($query) use ($search) {
-                        $query->where('judul', 'like', "%{$search}%")
-                              ->orWhere('nama', 'like', "%{$search}%")
-                              ->orWhere('nim', 'like', "%{$search}%");
-                    })
-                    ->orderBy('created_at', 'desc')
-                    ->paginate($perPage)
-                    ->withQueryString();       // agar pagination tidak hilang saat search
+        $laporans = Laporan::with(['user', 'prodi'])
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                ->orWhereHas('user', function ($u) use ($search) {
+                    $u->where('name', 'like', "%{$search}%")
+                        ->orWhere('nim', 'like', "%{$search}%");
+                })
+                ->orWhereHas('prodi', function ($p) use ($search) {
+                    $p->where('nama', 'like', "%{$search}%");
+                });
+            });
+        })
+        ->latest()
+        ->paginate($perPage)
+        ->withQueryString();
 
+        $laporanTerbaru = Laporan::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
 
-        // ====== DATA LAPORAN TERBARU ======
-        $laporanTerbaru = Laporan::orderBy('created_at', 'desc')
-                            ->take(5)
-                            ->get();
-
-        return view('user.beranda.index', compact('laporans', 'laporanTerbaru', 'search'));
+        return view('user.beranda.index', compact(
+            'laporans',
+            'laporanTerbaru',
+            'search'
+        ));
     }
 }
+
 

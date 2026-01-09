@@ -207,9 +207,15 @@ $(document).ready(function () {
     $('#datatable-prodi').DataTable({
         responsive: true,
         autoWidth: false,
-
-        dom: '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
-
+        dom:
+        '<"row g-2 mb-2"' +
+        '<"col-12 col-md-6"l>' +
+        '<"col-12 col-md-6"f>' +
+        '>rt' +
+        '<"row g-2 mt-2"' +
+        '<"col-12 col-md-6"i>' +
+        '<"col-12 col-md-6"p>' +
+        '>',
         pageLength: 5,
         lengthMenu: [5, 10, 25, 50, 100],
 

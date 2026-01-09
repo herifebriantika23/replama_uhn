@@ -184,29 +184,41 @@
 
 @push('scripts')
 <script>
-$(document).ready(function () {
-    $('#datatable-fakultas').DataTable({
-        responsive: true,
-        autoWidth: false,
-        dom: '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
-        pageLength: 5,
-        lengthMenu: [5, 10, 25, 50, 100],
-        language: {
-            search: "Cari Fakultas:",
-            lengthMenu: "Tampilkan _MENU_ data",
-            info: "Menampilkan _START_ - _END_ dari _TOTAL_ fakultas",
-            infoEmpty: "Tidak ada data",
-            zeroRecords: "Data fakultas tidak ditemukan",
-            paginate: {
-                previous: "‹",
-                next: "›"
-            }
-        },
-        columnDefs: [
-            { orderable: false, targets: [0, 2] },
-            { className: "text-center", targets: [0, 2] }
-        ]
-    });
+$('#datatable-fakultas').DataTable({
+    responsive: {
+        details: {
+            type: 'column',
+            target: 'tr'
+        }
+    },
+    autoWidth: false,
+    pageLength: 5,
+    lengthMenu: [5, 10, 25, 50, 100],
+    dom:
+    '<"row g-2 mb-2"' +
+    '<"col-12 col-md-6"l>' +
+    '<"col-12 col-md-6"f>' +
+    '>rt' +
+    '<"row g-2 mt-2"' +
+    '<"col-12 col-md-6"i>' +
+    '<"col-12 col-md-6"p>' +
+    '>',
+    language: {
+        search: "Cari:",
+        lengthMenu: "Tampilkan _MENU_ data",
+        info: "_START_ - _END_ dari _TOTAL_ fakultas",
+        zeroRecords: "Data tidak ditemukan",
+        paginate: {
+            previous: "‹",
+            next: "›"
+        }
+    },
+    columnDefs: [
+        { responsivePriority: 1, targets: 1 }, // Nama Fakultas
+        { responsivePriority: 2, targets: 2 }, // Aksi
+        { orderable: false, targets: [0, 2] },
+        { className: "text-center", targets: [0, 2] }
+    ]
 });
 </script>
 @endpush
