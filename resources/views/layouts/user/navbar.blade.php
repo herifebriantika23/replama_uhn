@@ -9,10 +9,10 @@
 
         {{-- TOGGLER --}}
         <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar">
-            <i class="bi bi-list fs-4"></i>
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar">
+        <i class="bi bi-list fs-4"></i>
         </button>
 
         {{-- MENU DESKTOP --}}
@@ -131,3 +131,71 @@
         </div>
     </div>
 </nav>
+
+{{-- OFFCANVAS MOBILE --}}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column">
+
+        {{-- MENU UTAMA --}}
+        <ul class="navbar-nav gap-2">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('user.beranda') }}">Beranda</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('user.tentang') }}">Tentang Web</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('user.panduan') }}">Panduan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('user.laporan.index') }}">Kelola Laporan</a>
+            </li>
+        </ul>
+
+        <hr>
+
+        {{-- NOTIFIKASI --}}
+        <a href="{{ route('user.notification.index') }}"
+           class="btn btn-outline-primary w-100 mb-2">
+            <i class="ti ti-bell me-1"></i>
+            Notifikasi
+            @if(($navUnreadCount ?? 0) > 0)
+                <span class="badge bg-danger ms-1">{{ $navUnreadCount }}</span>
+            @endif
+        </a>
+
+        {{-- PROFIL --}}
+        @isset($navUser)
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <img src="{{ $navUser->photo_url }}"
+                 class="rounded-circle border"
+                 width="42" height="42"
+                 style="object-fit:cover">
+            <div>
+                <div class="fw-semibold">{{ $navUser->name }}</div>
+                <small class="text-muted">{{ ucfirst($navUser->role) }}</small>
+            </div>
+        </div>
+
+        <a href="{{ route('profile.show') }}" class="btn btn-light w-100 mb-2">
+            <i class="ti ti-user me-1"></i> Profil
+        </a>
+
+        <a href="{{ route('password.edit') }}" class="btn btn-light w-100 mb-2">
+            <i class="ti ti-edit me-1"></i> Pengaturan
+        </a>
+
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-danger w-100">
+                <i class="ti ti-logout me-1"></i> Logout
+            </button>
+        </form>
+        @endisset
+    </div>
+</div>
